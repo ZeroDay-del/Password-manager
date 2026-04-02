@@ -12,6 +12,32 @@ const string key = "CyberKey";
 const string MASTER_PASSWORD = "123";
 const string mainAccount = "Default User";
 
+// Trim the Left side of the String
+string ltrim(const string &str){
+    int start = 0;
+    while(start < str.length() && isspace(str[start])){
+        start++;
+    }
+    return str.substr(start);
+}
+
+// Trim the right side of the String
+string rtrim(const string &str){
+    int theEnd = str.length() - 1;
+
+    while(theEnd >= 0 && isspace(str[theEnd])){
+        theEnd --;
+    }
+    return str.substr(0, theEnd + 1);
+}
+
+// Trim the both sides of the String
+string trim(const string &str){
+    return rtrim(ltrim(str));
+}
+
+
+
 void showMenu() {
     cout << "==================================================\n";
     cout << "                MAIN MENU                         \n";
@@ -20,12 +46,67 @@ void showMenu() {
     cout << "[1] Add Credential\n";
     cout << "[2] View Credentials\n";
     cout << "[3] Search Credential\n";
-    cout << "[4] Exit\n";
+    cout << "[4] Change A Site credential\n";
+    cout << "[5] Exit\n";
 
     cout << "--------------------------------------------------\n";
     cout << "Select Option: ";
 }
 
+
+
+// THis function updates the password of the user
+bool updatePasswowrd(){
+        // Check which credential first
+        string website;
+        bool status = false;
+
+        cout << "Enter Website To change its credentials: ";
+        cin >> website;
+
+        ifstream file("manager.txt");
+        string line;
+
+        cout << "Website | Username | Password" << endl;
+        cout << " " << endl;
+
+        while (getline(file, line)){
+            stringstream ss(line);
+             string site, value;
+            getline(ss, value, '|');
+            site = trim(value);
+
+            if(website.compare(site) == 0){
+                status = true;
+                cout << "The site you want to change has been found" << endl;
+                string newPassword;
+                cout << "Enter new password: ";
+                cin newPassword;
+                break;
+
+
+            }
+        }
+
+        void removeLine(const string &filename){
+        ifstream inFile(filename);
+        ofstream tempFile("temp.txt");
+
+
+}
+        if(status){
+              const string filename = "";
+        }
+
+        file.close();
+        cout << "The site you want to change not found" << endl;
+        return false;
+
+}
+
+
+
+// This function displays the message generated at run time //
 void loadingEffect(string message) {
     cout << message;
     for (int i = 0; i < 3; i++) {
@@ -63,30 +144,6 @@ bool login() {
 }
 
 
-// Trim the Left side of the String
-string ltrim(string str){
-    int start = 0;
-    while(start < str.length() && isspace(str[start])){
-        start++;
-    }
-    return str.substr(start);
-}
-
-// Trim the right side of the String
-string rtrim(string str){
-    int theEnd = str.length() - 1;
-
-    while(theEnd >= 0 && isspace(str[theEnd])){
-        theEnd --;
-    }
-    return str.substr(0, theEnd + 1);
-}
-
-// Trim the both sides of the String
-string trim(string str){
-    return rtrim(ltrim(str));
-}
-
 //Rotate bits to the LEFT
 // Moves bits left and wraps overflow bits to the right side
 unsigned char rotateLeft(unsigned char c, int shift) {
@@ -101,7 +158,7 @@ unsigned char rotateRight(unsigned char c, int shift) {
 
 // This is The ENCRYPTION FUNCTION
 // Combines XOR, bit rotation, and position-based mixing
-string encrypt(string text, string key) {
+string encrypt(const string &text, const string &key) {
     string result = text;
 
     for (int i = 0; i < text.size(); i++) {
@@ -121,7 +178,7 @@ string encrypt(string text, string key) {
 
 // DECRYPTION FUNCTION
 // Reverses all encryption steps in reverse order
-string decrypt(string text, string key) {
+string decrypt(const string &text, const string &key) {
     string result = text;
 
     for (int i = 0; i < text.size(); i++) {
@@ -209,7 +266,7 @@ int main()
 
             file.close();
 
-        }else if(option == "4"){
+        }else if(option == "5"){
             exit(0);
 
         }else if(option == "3"){
@@ -255,6 +312,8 @@ int main()
             if(check == false){
                 cout << "Credentials Not Found!" << endl;
             }
+        }else if(option == "4"){
+            updatePasswowrd();
         }
     }
 
